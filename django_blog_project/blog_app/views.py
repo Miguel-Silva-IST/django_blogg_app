@@ -1,22 +1,10 @@
 from django.shortcuts import render
-
-posts = [
-    {'author' : 'Miguel Silva',
-     'title' : 'HFT : Introduction',
-     'content' : 'sample content',
-     'date' : '01/01/2025'
-     },
-     {'author' : 'Edu Faria',
-     'title' : 'Trading in Surfing',
-     'content' : 'sample content',
-     'date' : '01/01/2026'
-     }
-]
+from .models import Post
 
 def home(request):
     
     context = {
-        'posts' : posts,
+        'posts' : Post.objects.all(),
         'title' : 'Fast Trading Blog'
     }
     return render(request, 'blog_app/home.html', context)
