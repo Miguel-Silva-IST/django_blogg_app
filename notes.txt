@@ -1,0 +1,1 @@
+django-admin - gives list of django cli commands
