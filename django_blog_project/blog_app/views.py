@@ -8,14 +8,10 @@ from django.views.generic import  (
         DeleteView
     )
 from .models import Post
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
-def home(request):
-    
-    context = {
-        'posts' : Post.objects.all(),
-        'title' : 'Fast Trading Blog'
-    }
-    return render(request, 'blog_app/home.html', context)
 
 
 class PostListView(ListView):
@@ -67,3 +63,37 @@ def about(request):
     return render(request, 'blog_app/about.html')
 
 
+
+def home(request):
+    
+    context = {
+        'posts' : Post.objects.all(),
+        'title' : 'Fast Trading Blog'
+    }
+    return render(request, 'blog_app/home.html', context)
+
+
+
+def blog_post_like(request, pk):
+    """functionality for liking and unliking posts"""
+    #checks if user is logged
+    if request.user.is_authenticated:
+        post = get_object_or_404(Post, id=pk)
+    else:
+        return HttpResponseRedirect(reverse('login'))
+    
+    redirect_to_home = request.POST.get('redirect_to_home', 'True')
+    
+    #if user associated to request is in likes list then removes like
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+    else:
+        #if request user not in like list, then adds 
+        post.likes.add(request.user)
+
+    #added feature for when clicking on list view it returns home
+    #else it returns to the post detail view
+    if redirect_to_home == 'True':
+        return HttpResponseRedirect(reverse('blog-home'))
+    else:
+        return HttpResponseRedirect(reverse('post-detail', kwargs={'pk': pk}))

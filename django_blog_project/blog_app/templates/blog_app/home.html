@@ -5,15 +5,25 @@
 
     {% for post in posts %}
     <article class="media content-section">
-        <img class ="rounded-circle article-img" src ="{{ post.author.profile.image.url }}">
+        <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
         <div class="media-body">
-          <div class="article-metadata">
-            <a class="mr-2" href="{% url 'profile' %}">{{ post.author }}</a>
-            <small class="text-muted">{{ post.date_posted }}</small>
+            <div class="article-metadata">
+                <a class="mr-2" href="{% url 'profile' %}">{{ post.author }}</a>
+                <small class="text-muted">{{ post.date_posted }}</small>
+            </div>
+            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+            <p class="article-content">{{ post.content }}</p>
+            <div class="post-footer d-flex justify-content-end">
+              <form method="post" action="{% url 'post-like' post.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="redirect_to_home" value="True">
+                <button type="submit" class="btn btn-primary">
+                    {{ post.number_of_likes }} likes
+                </button>
+            </form>
+            
           </div>
-          <h2><a class="article-title" href="{% url 'post-detail' post.id %}" >{{ post.title }}</a></h2>
-          <p class="article-content">{{ post.content }}</p>
-        </div>
-      </article>    
+         </div>
+    </article>
     {% endfor %}
 {% endblock content %}

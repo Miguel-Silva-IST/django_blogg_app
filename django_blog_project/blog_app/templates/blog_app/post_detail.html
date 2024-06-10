@@ -11,6 +11,14 @@
               <a class = "btn-secondary btn-sm mt-l mb-l" href="{% url 'post-update' object.id %}">Update</a>
               <a class = "btn-danger btn-sm mt-l mb-l" href="{% url 'post-delete' object.id %}">Delete</a>
             {% endif %}
+            <div class="post-footer d-flex justify-content-end">
+              <form method="post" action="{% url 'post-like' object.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="redirect_to_home" value="False">
+                <button type="submit" class="btn btn-primary">
+                    {{ post.number_of_likes }} likes
+                </button>
+            </form>
             </div>
           </div>
           <h2 class="article-title">{{ object.title }}</h2>
