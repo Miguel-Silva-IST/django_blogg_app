@@ -36,8 +36,22 @@
                 </div>
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="#">Login</a>
-                    <a class="nav-item nav-link" href="#">Register</a>
+                    {% if user.is_authenticated %}
+                    <!-- When loggout link is pressed, it sends the logout post request from hidden form -->
+                    <a class="nav-item nav-link" href="" onclick="document.getElementById('logoutForm').submit(); return false;">Logout</a>
+                    <a class="nav-item nav-link" href="{% url 'profile' %}">{{ user.username }}</a>
+                    <a class="nav-item nav-link" href="{% url 'post-create' %}">Create post</a>
+                    {% else %}
+                    <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                    <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                    {% endif %}
+                    
+
+                    <!-- hidden logout form -->
+                    <form id="logoutForm" method="post" action="{% url 'logout' %}" style="display: none;">
+                        {% csrf_token %}
+                    </form>
+
                 </div>
                 </div>
             </div>
